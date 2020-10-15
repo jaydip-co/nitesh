@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
 
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: Wrapper()
+        home: new Wrapper()
       ),
     );
   }

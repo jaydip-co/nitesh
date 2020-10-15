@@ -48,6 +48,7 @@ class _PagesDrawerState extends State<PagesDrawer> {
                 image: AssetImage('images/logo.png')
               )
             ),
+            child: Text(''),
 
           ),
            ListTile(

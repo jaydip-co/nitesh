@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:nitesh/Model/Appbar.dart';
 import 'package:nitesh/Model/Pages.dart';
@@ -18,10 +21,36 @@ class _OrderState extends State<Order> {
   String middle;
   String last;
   String state;
-  String city;
+  String cities;
   int pincode;
+  bool loop = false;
+  var random ;
   String address;
   bool _autovalidate = false;
+  List<String> citylist = List();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    //_city();
+
+  }
+
+
+  Future _city()async{
+    print('hello');
+    final   _city = await Firestore.instance.collection('states').document('Gujarat').get();
+     // print(_city.data['City'].length);
+      for(var i = 0 ;i< _city.data['City'].length - 1; i++)
+        {
+          setState(() {
+                citylist.add(_city.data['City'][i]);
+          });
+
+        }
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,31 +78,46 @@ class _OrderState extends State<Order> {
                     TextFormField(
                         decoration: showInput.copyWith(labelText: 'First Name',),
                         validator: (val) => val.isEmpty ? 'Enter The First Name':null,
+                      onChanged: (val) => first =val,
                     ),
                     SizedBox(height: 10,),
                     TextFormField(
                         decoration: showInput.copyWith(labelText: 'Middle Name',),
                       validator: (val) => val.isEmpty ? 'Enter The Middle Name':null,
+                      onChanged: (val) => middle =val,
                     ),
                     SizedBox(height: 10,),
                     TextFormField(
                         decoration: showInput.copyWith(labelText: 'Last Name',),
                       validator: (val) => val.isEmpty ? 'Enter The Last Name':null,
+                      onChanged: (val) => last =val,
                     ),
                     SizedBox(height: 10,),
-                    TextFormField(
+                   /* TextFormField(
                         decoration: showInput.copyWith(labelText: 'State',),
                       validator: (val) => val.isEmpty ? 'Enter The State Name ':null,
-                    ),
+                    ),*/
                     SizedBox(height: 10,),
-                    TextFormField(
+                    DropdownButtonFormField(
+                      decoration: showInput.copyWith(labelText: 'City',),
+                      onChanged: (val) => cities = val,
+                      validator: (val) => val.isEmpty ? 'Enter The City Name ':null,
+                      items: citylist.map((e){
+                        return DropdownMenuItem(
+                          value: e.toString(),
+                          child: Text(e),
+                        );
+                      }).toList(),
+                    ),
+                    /*TextFormField(
                         decoration: showInput.copyWith(labelText: 'City',),
                         validator: (val) => val.isEmpty ? 'Enter The City Name ':null,
-                    ),
+                    ),*/
                     SizedBox(height: 10,),
                     TextFormField(
                       keyboardType: TextInputType.phone,
                         decoration: showInput.copyWith(labelText: 'Pincode',),
+                      onChanged: (val) => pincode =int.parse(val),
                       validator: validatepincode,
                     ),
                     SizedBox(height: 10,),

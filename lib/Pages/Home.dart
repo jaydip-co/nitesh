@@ -16,7 +16,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home>  with SingleTickerProviderStateMixin{
-
+  List<String> image = ['images/leaf.jpg','images/logo.png','images/sharingan.jpg'];
+  int photoindex = 0;
   Animation animation;
   AnimationController controller;
   final GlobalKey _formkey = GlobalKey<FormState>();
@@ -30,11 +31,12 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin{
     animation =  IntTween(begin: 0,end: image.length - 1).animate(controller)
       ..addListener(() {
         setState(() {
+          //print(animation.value);
           photoindex = animation.value;
         });
       });
-    controller.stop();
-    //controller.repeat();
+
+    // controller.repeat();
 
   }
 
@@ -44,8 +46,7 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin{
     super.dispose();
     controller.dispose();
   }
-  List<String> image = ['images/1.jpg','images/2.jpg','images/3.jpg'];
-  int photoindex = 0;
+
   @override
   Widget build(BuildContext context) {
     controller.repeat();

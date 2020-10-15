@@ -13,7 +13,7 @@ class LogIn extends StatefulWidget {
 
 class _LogInState extends State<LogIn> {
   String number;
-  String mobile;
+
   String code = '+91';
   bool autovalidate = false;
   final _formkey = GlobalKey<FormState>();
@@ -23,29 +23,34 @@ class _LogInState extends State<LogIn> {
     FirebaseAuth _auth = FirebaseAuth.instance;
 
     _auth.verifyPhoneNumber(
-        phoneNumber: phonenumber,
+        phoneNumber: number,
         timeout: Duration(seconds: 60),
-        verificationCompleted: (AuthCredential credential)async{
+        verificationCompleted: (AuthCredential credential) async{
           Navigator.of(context).pop();
+
           AuthResult result = await _auth.signInWithCredential(credential);
           FirebaseUser user = result.user;
-            return AuthService().firebaseUser(user);
+          AuthService().newUser(number);
+          return AuthService().firebaseUser(user);
 
+
+
+          //This callback would gets called when verification is done auto maticlly
         },
         verificationFailed: (AuthException exception){
-          print(exception.message);
+          print(exception);
         },
-
         codeSent: (String verificationId, [int forceResendingToken]){
           showDialog(
               context: context,
               barrierDismissible: false,
-              builder: (context){
+              builder: (context) {
                 return AlertDialog(
-                  title: Text('Enter The OTP'),
-                  content:
-                      TextFormField(
-                        keyboardType: TextInputType.phone,
+                  title: Text("Give the code?"),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      TextField(
                         decoration:inputdecoration.copyWith(
                           labelText: 'OTP',
                           enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.green),borderRadius: BorderRadius.circular(20.0)),
@@ -56,26 +61,24 @@ class _LogInState extends State<LogIn> {
                         ),
                         controller: _codeController,
                       ),
-
-
-
+                    ],
+                  ),
                   actions: <Widget>[
                     FlatButton(
-                      child: Text(
-                          'Confirm',
-                        style: TextStyle(
+                      child: Text("Confirm",style: TextStyle(
                           color: CommonAssets.flatbuttonTextColor
-                        ),
-                      ),
-                      onPressed: ()async{
+                      ),),
+                      textColor: Colors.white,
+
+                      onPressed: () async{
                         final code = _codeController.text.trim();
                         AuthCredential credential = PhoneAuthProvider.getCredential(verificationId: verificationId, smsCode: code);
                         AuthResult result = await _auth.signInWithCredential(credential);
-                        FirebaseUser user  = result.user;
-                        String number = result.user.displayName;
-
+                        FirebaseUser user = result.user;
                         Navigator.of(context).pop();
+                        AuthService().newUser(number);
                         return AuthService().firebaseUser(user);
+
 
                       },
                     )

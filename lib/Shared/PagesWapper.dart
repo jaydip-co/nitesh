@@ -8,18 +8,19 @@ class PagesWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _pageprovider =  Provider.of<PageProvider>(context);
-   // print(_pageprovider.page);
+    print('page');
+    print(_pageprovider.page);
     if(_pageprovider.page == 'Home'){
-      return Home();
+      return new Home();
     }
     else if(_pageprovider.page == 'Profile'){
-      return Demo();
+      return new Demo();
     }
     else if(_pageprovider.page == 'Order'){
-      return Order();
+      return new Order();
     }
     else{
-      return Home();
+      return  new Home();
     }
 
   }

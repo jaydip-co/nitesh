@@ -23,32 +23,6 @@ class AuthService {
     return await _auth.signOut();
   }
 
-  Future newUser(String number) async {
-    try {
-      final CollectionReference _usercollection =
-      Firestore.instance.collection('Users');
-      final existuser =
-          await Firestore.instance.collection('Users').document(number).get();
-
-      if (existuser.data == null) {
-        await _usercollection.document(number).setData({
-          'First': '',
-          'Middle': '',
-          'Last': '',
-          'City': '',
-          'Pindcode': int.parse('0'),
-          'Address': '',
-          'OrderNumber': int.parse('0'),
-          'LastOrder':FieldValue.arrayUnion([])
 
 
-        });
-      }
-      else{
-        print('exist');
-      }
-    } catch (e) {
-      print(e.toString());
-    }
-  }
 }

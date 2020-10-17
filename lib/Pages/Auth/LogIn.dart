@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nitesh/Pages/Home.dart';
 import 'package:nitesh/Service/AuthService.dart';
+import 'package:nitesh/Service/Database.dart';
 import 'package:nitesh/Shared/Inputdecoration.dart';
 import 'package:nitesh/commonAssets.dart';
 
@@ -30,7 +31,7 @@ class _LogInState extends State<LogIn> {
 
           AuthResult result = await _auth.signInWithCredential(credential);
           FirebaseUser user = result.user;
-          AuthService().newUser(number);
+          DatabaseService(number:number).newUser();
           return AuthService().firebaseUser(user);
 
 
@@ -76,7 +77,7 @@ class _LogInState extends State<LogIn> {
                         AuthResult result = await _auth.signInWithCredential(credential);
                         FirebaseUser user = result.user;
                         Navigator.of(context).pop();
-                        AuthService().newUser(number);
+                        DatabaseService(number: number).newUser();
                         return AuthService().firebaseUser(user);
 
 
@@ -123,7 +124,11 @@ class _LogInState extends State<LogIn> {
                       TextFormField(
                         cursorColor: CommonAssets.cursorcolor,
                         keyboardType: TextInputType.phone,
-                        onChanged: (val) =>  number = "+91"+ val,
+                        onChanged: (val) {
+                          number = "+91"+ val;
+
+
+                        } ,
                         validator: numberValidation,
                         decoration:inputdecoration.copyWith(
                           enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.green),borderRadius: BorderRadius.circular(20.0)),

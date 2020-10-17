@@ -5,13 +5,8 @@ class Loading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SpinKitFadingCircle(
-      itemBuilder: (BuildContext context, int index) {
-        return DecoratedBox(
-          decoration: BoxDecoration(
-            color: index.isEven ? Colors.red : Colors.green,
-          ),
-        );
-      },
+      color: Colors.white,
+      size: 50.0,
     );
   }
 }

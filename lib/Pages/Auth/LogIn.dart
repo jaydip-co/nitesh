@@ -111,7 +111,7 @@ class _LogInState extends State<LogIn> {
                   style: TextStyle(
                     fontSize: 40.0,
                     fontWeight: FontWeight.w900,
-                    color: CommonAssets.appbarColor,
+                    color: CommonAssets.appbarTextColor,
                     fontFamily:   ''
                   ),
                 ),

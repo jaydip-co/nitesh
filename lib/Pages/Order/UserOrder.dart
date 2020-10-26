@@ -3,7 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nitesh/Model/Appbar.dart';
 import 'package:nitesh/Model/Pages.dart';
+import 'package:nitesh/Model/Product.dart';
 import 'package:nitesh/Model/User.dart';
+import 'package:nitesh/Pages/Address.dart';
 import 'package:nitesh/Shared/Drawer.dart';
 import 'package:nitesh/Shared/Loading.dart';
 import 'package:nitesh/commonAssets.dart';
@@ -18,6 +20,8 @@ class _UserOrderState extends State<UserOrder> {
   Widget build(BuildContext context) {
       final _userprovider = Provider.of<User>(context);
     final _pageprovider = Provider.of<PageProvider>(context);
+      final _tempproduct = Provider.of<TempProduct>(context);
+
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return WillPopScope(
@@ -31,12 +35,15 @@ class _UserOrderState extends State<UserOrder> {
           builder: (context,Usersnapshot){
             if(Usersnapshot.hasData){
               List<String> userOrder = List.from(Usersnapshot.data['LastOrder']);
+              userOrder.sort((a, b) => b.compareTo(a));
+              print(userOrder);
+
               return ListView.builder(
                     itemCount:   Usersnapshot.data['LastOrder'].length ?? 0,
-                  itemExtent:150.0,
+
                   itemBuilder: (context,index){
                     return StreamBuilder<DocumentSnapshot>(
-                      stream: Firestore.instance.collection('Order').document(Usersnapshot.data['LastOrder'][index]).snapshots(),
+                      stream: Firestore.instance.collection('Order').document(userOrder [index]).snapshots(),
                       builder: (context,OrdeSnapshot){
                         if(OrdeSnapshot.hasData)
                           {
@@ -52,24 +59,57 @@ class _UserOrderState extends State<UserOrder> {
                                       child: Card(
                                         shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(5.0),
-                                          side: new BorderSide(color: Colors.black, width: 0.1),
+                                          side: new BorderSide(color: Colors.black, width: 0.3),
                                         ),
-                                        child: ListTile(
-                                          title: Row(
-                                            children: <Widget>[
-                                            Expanded(
-                                              child: Image(
-                                                image: NetworkImage(itemsnapshot.data["Images"][0]),
+                                        child:Column(
+                                          children: <Widget>[
+                                            Card(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(5.0),
+                                                side: new BorderSide(color: Colors.black, width: 0.1),
+                                              ),
+                                              child:  ListTile(
+                                                leading: GestureDetector(
+                                                  onTap: (){
+                                                    _tempproduct.setProduct(itemsnapshot.data.documentID);
+                                                    _pageprovider.setpages('Product', _pageprovider.page);
+                                                  },
+                                                  child: ConstrainedBox(
+                                                    constraints: BoxConstraints(
+                                                      minWidth: 80,
+                                                      minHeight: 80,
+                                                      maxWidth: 120,
+                                                      maxHeight: 120,
+                                                    ),
+                                                    child: Image.network(itemsnapshot.data["Images"][0], fit: BoxFit.cover),
+                                                  ),
+//                                            Image(
+//                                              image: NetworkImage(itemsnapshot.data["Images"][0]),
+//                                            ),
+                                                ),
+                                                title:Text(
+                                                    itemsnapshot.data['ItemTitle']??'Title Miss',
+                                                  style: TextStyle(
+                                                    color: CommonAssets.cardTextColor,
+                                                    fontWeight: FontWeight.w500
+                                                  ),
+                                                ),
+                                                subtitle: Text(d.toString().substring(0,19)?? 'Date Miss'),
                                               ),
                                             ),
-                                              SizedBox(width: 6,),
-                                              Expanded(child: Text(itemsnapshot.data['ItemTitle'])
+                                            GestureDetector(
+                                                onTap: (){
+
+                                                },
+                                              child: ListTile(
+                                                title: Text('View Order Details'),
                                               ),
-                                            ],
-                                          ),
-                                          subtitle: Text(d.toString().substring(0,19)),
-                                        ),
-                                      ),
+                                            )
+                                          ],
+                                        )
+
+                                      )
+
                                     );
                                   }
                                   else{

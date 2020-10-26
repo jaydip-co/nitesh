@@ -6,6 +6,7 @@ class TempProduct extends ChangeNotifier {
   int Quantity;
  String Category ;
  String ItemColor;
+ String OrderNumber;//OrderNUmber for custom to track the order
     setProduct(String products){
       productName = products;
     //  print(productName);
@@ -17,10 +18,14 @@ class TempProduct extends ChangeNotifier {
     Category =category;
     ItemColor= color;
     notifyListeners();
-    print('Quantity = '+Quantity.toString());
-    print('Category = '+Category.toString());
-    print('Color = '+ItemColor.toString());
+//    print('Quantity = '+Quantity.toString());
+//    print('Category = '+Category.toString());
+//    print('Color = '+ItemColor.toString());
+    }
 
+    setOrderNumber(String ordernumber){
+      OrderNumber = ordernumber;
+      notifyListeners();
     }
 
 }

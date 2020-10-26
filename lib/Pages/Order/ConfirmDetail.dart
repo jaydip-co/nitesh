@@ -15,12 +15,12 @@ import 'package:nitesh/commonAssets.dart';
 import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
-class OrderDetails extends StatefulWidget {
+class ConfirmDetails extends StatefulWidget {
   @override
-  _OrderDetailsState createState() => _OrderDetailsState();
+  _ConfirmDetailsState createState() => _ConfirmDetailsState();
 }
 
-class _OrderDetailsState extends State<OrderDetails> {
+class _ConfirmDetailsState extends State<ConfirmDetails> {
   String usernumber;
   int amount;// given amount
   int ordernumber;
@@ -83,6 +83,7 @@ class _OrderDetailsState extends State<OrderDetails> {
     });
     await OrderAddCancel(UserNumber: usernumber, OrderNumber: ordernumber)
         .addOrder(
+      usernumber,
       amount,
       c_item,
       c_category,
@@ -213,7 +214,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                                   height :20,
                                                   decoration: BoxDecoration(
                                                     borderRadius: BorderRadius.circular(8.0),
-                                                    color: Colors.red,
+                                                    color: Color(0xff443a49),
                                                   ),
                                                 ),
 

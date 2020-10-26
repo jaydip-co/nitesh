@@ -22,5 +22,7 @@ class CommonAssets{
 
  // color for orderdetailspage
  static Color orderpagebackcolor = Colors.grey[300];
+//card text style
+static Color cardTextColor = Colors.black;
 
 }

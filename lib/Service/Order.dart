@@ -7,6 +7,7 @@ class OrderAddCancel{
   final CollectionReference _orderReference = Firestore.instance.collection('Order');
 
   Future addOrder(
+      String userId,
       int amount,
       String item,
       String category,
@@ -19,6 +20,7 @@ class OrderAddCancel{
 
       String OrderId = UserNumber+'-'+ OrderNumber.toString();
     await _orderReference.document(OrderId.toString()).setData({
+      'UserId':userId,
       'ItemType':item,
       'Category':category,
       'Quantity':quantity,

@@ -323,7 +323,7 @@ class _ProductState extends State<Product> {
                               shape: StadiumBorder(),
                               color: CommonAssets.buttonColor,
                               onPressed: () async{
-                                _pageprovider.setpages('OrderDetails',_pageprovider.page);
+                                _pageprovider.setpages('ConfirmDetails',_pageprovider.page);
                                 _tempProduct.setQuantity(quantity,_selectedcategory ?? _category[0] ,_selectedcolor ?? _color[0]);
                               //  _pageprovider.setpages('Order',_pageprovider.page);
                               },

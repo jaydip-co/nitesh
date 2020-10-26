@@ -70,7 +70,7 @@ class _PagesDrawerState extends State<PagesDrawer> {
                  {
                    widget.controller.stop();
                  }
-                 _pageprovider.setpages('Profile',_pageprovider.page.toString());
+                 _pageprovider.setpages('UserOrder',_pageprovider.page.toString());
                },
                title: Row(
                  children: <Widget>[

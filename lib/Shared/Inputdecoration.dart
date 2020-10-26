@@ -38,3 +38,14 @@ const inputdecoration = InputDecoration(
      errorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red),borderRadius: BorderRadius.circular(15.0)),
    labelStyle: TextStyle(color: CommonAssets.labelTextColor),
  );
+
+ InputDecoration dropdownDecoration = InputDecoration(
+   enabledBorder: OutlineInputBorder(
+       borderSide: BorderSide(color:CommonAssets.dropdownbordercolor),
+       borderRadius: BorderRadius.circular(15.0)
+   ),
+   focusedBorder: OutlineInputBorder(
+       borderSide: BorderSide(color:Colors.green),
+       borderRadius: BorderRadius.circular(15.0)
+   ),
+ );

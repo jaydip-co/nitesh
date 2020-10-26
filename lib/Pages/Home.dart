@@ -21,6 +21,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home>  with SingleTickerProviderStateMixin{
+
   List<String> image = ['images/leaf.jpg','images/logo.png','images/sharingan.jpg'];
   int photoindex = 0;
   Animation animation;
@@ -52,6 +53,7 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin{
     controller.dispose();
   }
 
+
   @override
   Widget build(BuildContext context) {
     controller.repeat();
@@ -62,7 +64,7 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin{
     final heghit = MediaQuery.of(context).size.height;
     return   StreamBuilder<QuerySnapshot>(
       
-      stream: Firestore.instance.collection('SellerProduct').snapshots(),
+      stream: Firestore.instance.collection('SellerProduct').orderBy('ItemRank',descending: false).snapshots(),
       builder: (context, snapshot) {
         if(snapshot.hasData)
           {
@@ -93,7 +95,7 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin{
                       ),
                       Divider(
                          color: CommonAssets.dividerColor,
-                        thickness: 2.0,
+
                       ),
                       Expanded(
                         child: ListView.builder(
@@ -136,9 +138,20 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin{
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
-                                        child: Text(snapshot.data.documents[index].documentID.toString() + ''),
+                                        child: Text(
+                                          snapshot.data.documents[index]['ItemTitle'].toString() + '',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 18.0
+                                        ),
+                                        ),
                                       ),
-                                      Text('₹'+snapshot.data.documents[index]['Price'].toString()),
+                                      Text(
+                                        '₹'+snapshot.data.documents[index]['Price'].toString(),
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 16.0
+                                        ),),
                                       Divider(color: CommonAssets.dividerColor, thickness: CommonAssets.dividerthickness,),
                                     ],
                                   ),
@@ -152,7 +165,7 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin{
                   ),
                 ),
 
-                floatingActionButton: FloatingActionButton(
+               /* floatingActionButton: FloatingActionButton(
                     onPressed: (){
                       //alertBox();
                       controller.stop();
@@ -161,7 +174,7 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin{
                     },
                     backgroundColor: CommonAssets.buttonColor,
                     child: Icon(Icons.highlight)
-                ),
+                ),*/
                 drawer: PagesDrawer(controller: controller,page: _pageprovider.page,currentpage: 'Home',),
               ),
             );

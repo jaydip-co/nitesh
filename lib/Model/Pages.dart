@@ -8,9 +8,9 @@ class PageProvider extends ChangeNotifier{
   setpages(String pagename,String previousPagename){
     page = pagename;
     previouspage=  previousPagename;
-    /*print(page);
-    print(previouspage);
-    */
+    print('main =$page');
+    print('back = $previouspage');
+
 
     notifyListeners();
 

@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:nitesh/Common/CircularProgressIndicotr.dart';
 import 'package:nitesh/Model/Appbar.dart';
 import 'package:nitesh/Model/Pages.dart';
 import 'package:nitesh/Model/Product.dart';
@@ -41,9 +42,14 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin{
           photoindex = animation.value;
         });
       });
-
+    controller.stop();
     // controller.repeat();
-
+    Color color = new Color(0x12345678);
+    String colorString = color.toString(); // Color(0x12345678)
+    String valueString = colorString.split('(0x')[1].split(')')[0]; //
+    print(valueString);// kind of hacky..
+    int value = int.parse(valueString, radix: 16);
+    Color otherColor = new Color(value);
   }
 
   @override
@@ -62,110 +68,109 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin{
 
     final width =  MediaQuery.of(context).size.width;
     final heghit = MediaQuery.of(context).size.height;
-    return   StreamBuilder<QuerySnapshot>(
-      
-      stream: Firestore.instance.collection('SellerProduct').orderBy('ItemRank',descending: false).snapshots(),
-      builder: (context, snapshot) {
-        if(snapshot.hasData)
-          {
-            return WillPopScope(
-              onWillPop: (){
-                return _pageprovider.setpages('Home',_pageprovider.page.toString());
-              },
-              child: Scaffold(
+    return   Scaffold(
+      appBar: appbarWWidget(),
+      body: StreamBuilder<QuerySnapshot>(
 
-                appBar: appbarWWidget(),
-                body:  Container(
-                  color: Colors.white,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
+          stream: Firestore.instance.collection('SellerProduct').where('EnableItem',isEqualTo: true).orderBy('ItemRank',descending: false).snapshots(),
+          builder: (context, snapshot) {
+            if(snapshot.hasData)
+            {
+              return WillPopScope(
+                onWillPop: (){
+                  return _pageprovider.setpages('Home',_pageprovider.page.toString());
+                },
+                child:  Container(
+                    color: Colors.white,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
 
-                        width: width,
-                        height: 300,
-                        decoration: BoxDecoration(
-                          color: Colors.white10,
-                            image:DecorationImage(
-                                image: AssetImage(image[photoindex]),
-                                fit: BoxFit.cover
-                            )
+                          width: width,
+                          height: 300,
+                          decoration: BoxDecoration(
+                              color: Colors.white10,
+                              image:DecorationImage(
+                                  image: AssetImage(image[photoindex]),
+                                  fit: BoxFit.cover
+                              )
+                          ),
+
                         ),
+                        Divider(
+                          color: CommonAssets.dividerColor,
 
-                      ),
-                      Divider(
-                         color: CommonAssets.dividerColor,
-
-                      ),
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: snapshot.data.documents.length,
-                            itemBuilder: (context,index){
-                            return Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white
-                              ),
-                              child: GestureDetector(
-                                onTap: ()async{
-                                  controller.stop();
-                                 await _tempProduct.setProduct(snapshot.data.documents[index].documentID);
-                                 return _pageprovider.setpages('Product',_pageprovider.page);
-
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(20.0),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        height: 160.0,
-                                        width: 180.0,
-                                        decoration: BoxDecoration(
-                                          border: Border(
-                                            top: BorderSide(color: Colors.black),
-                                            bottom: BorderSide(color: Colors.black),
-                                            left: BorderSide(color: Colors.black),
-                                            right: BorderSide(color: Colors.black),
-                                          ),
-                                            borderRadius: BorderRadius.circular(30.0),
-
-                                            image: DecorationImage(
-                                                image: NetworkImage(snapshot.data.documents[index]['Images'][0]),
-                                                fit: BoxFit.cover
-                                            )
-                                        ),
-
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          snapshot.data.documents[index]['ItemTitle'].toString() + '',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 18.0
-                                        ),
-                                        ),
-                                      ),
-                                      Text(
-                                        '₹'+snapshot.data.documents[index]['Price'].toString(),
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 16.0
-                                        ),),
-                                      Divider(color: CommonAssets.dividerColor, thickness: CommonAssets.dividerthickness,),
-                                    ],
+                        ),
+                        Expanded(
+                          child: ListView.builder(
+                              itemCount: snapshot.data.documents.length,
+                              itemBuilder: (context,index){
+                                return Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.white
                                   ),
-                                ),
-                              ),
-                            );
-                            }
-                        ),
-                      )
-                    ],
-                  ),
-                ),
+                                  child: GestureDetector(
+                                    onTap: ()async{
+                                      controller.stop();
+                                      await _tempProduct.setProduct(snapshot.data.documents[index].documentID);
+                                      return _pageprovider.setpages('Product',_pageprovider.page);
 
-               /* floatingActionButton: FloatingActionButton(
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(20.0),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            height: 160.0,
+                                            width: 180.0,
+                                            decoration: BoxDecoration(
+                                                border: Border(
+                                                  top: BorderSide(color: Colors.black),
+                                                  bottom: BorderSide(color: Colors.black),
+                                                  left: BorderSide(color: Colors.black),
+                                                  right: BorderSide(color: Colors.black),
+                                                ),
+                                                borderRadius: BorderRadius.circular(30.0),
+
+                                                image: DecorationImage(
+                                                    image: NetworkImage(snapshot.data.documents[index]['Images'][0]),
+                                                    fit: BoxFit.cover
+                                                )
+                                            ),
+
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                              snapshot.data.documents[index]['ItemTitle'].toString() + '',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 18.0
+                                              ),
+                                            ),
+                                          ),
+                                          Text(
+                                            '₹'+snapshot.data.documents[index]['Price'].toString(),
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 16.0
+                                            ),),
+                                          Divider(color: CommonAssets.dividerColor, thickness: CommonAssets.dividerthickness,),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+
+                  /* floatingActionButton: FloatingActionButton(
                     onPressed: (){
                       //alertBox();
                       controller.stop();
@@ -175,14 +180,16 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin{
                     backgroundColor: CommonAssets.buttonColor,
                     child: Icon(Icons.highlight)
                 ),*/
-                drawer: PagesDrawer(controller: controller,page: _pageprovider.page,currentpage: 'Home',),
-              ),
-            );
+
+
+              );
+            }
+            else{
+              return CircularLoading();
+            }
           }
-        else{
-          return Loading();
-        }
-      }
+      ),
+      drawer: PagesDrawer(controller: controller,page: _pageprovider.page,currentpage: 'Home',),
     );
   }
 

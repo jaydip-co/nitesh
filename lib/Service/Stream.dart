@@ -5,8 +5,10 @@ class AllNumberStream{
   String number ;
   AllNumberStream({this.number});
 
-UserInfo UserModelData(DocumentSnapshot snapshot){
-  return UserInfo(
+UserInf UserModelData(DocumentSnapshot snapshot){
+
+  return UserInf(
+    orderNumber: snapshot.data['OrderNumber'],
       number: snapshot.documentID,
     address: snapshot.data['Address'],
     first: snapshot.data['First'],
@@ -17,19 +19,28 @@ UserInfo UserModelData(DocumentSnapshot snapshot){
   );
 }
 
-  Stream<DocumentSnapshot> get PERSONALINFO{
-    return Firestore.instance.collection('Users').document(number).snapshots();
+  // Stream<DocumentSnapshot> get PERSONALINFO{
+  //   return Firestore.instance.collection('Users').document(number).snapshots();
+  // }
+ Stream<UserInf> get PERSONALINFO{
+   return Firestore.instance.collection('Users').document(number).snapshots().map((UserModelData));
   }
-//  Stream<UserInfo> get PERSONALINFO{
-//    return Firestore.instance.collection('Users').document(number).snapshots().map((UserModelData));
-//  }
 }
 
-class ProducStream{
+class ProductStream{
   String product;
-  ProducStream({this.product});
+  ProductStream({this.product});
   Stream<DocumentSnapshot> get PRODUCTSTREAM{
     return Firestore.instance.collection('SellerProduct').document(product).snapshots();
   }
 
+}
+
+class OrderId{
+  String Order_Id;
+  OrderId({this.Order_Id});
+
+  Stream<DocumentSnapshot> get ORDERIDSTREAM{
+    return Firestore.instance.collection('Order').document(Order_Id).snapshots();
+  }
 }

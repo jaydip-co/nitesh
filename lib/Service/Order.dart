@@ -5,13 +5,14 @@ class OrderAddCancel{
   int  OrderNumber;
   OrderAddCancel({this.UserNumber,this.OrderNumber});
   final CollectionReference _orderReference = Firestore.instance.collection('Order');
+  final CollectionReference _OrderStatus = Firestore.instance.collection('OrderStatus');
 
   Future addOrder(
       String userId,
       int amount,
       String item,
       String category,
-      String color,
+      int color,
       int quantity,
       String first,String middle,String last,String city,String address,
 
@@ -21,11 +22,11 @@ class OrderAddCancel{
       String OrderId = UserNumber+'-'+ OrderNumber.toString();
     await _orderReference.document(OrderId.toString()).setData({
       'UserId':userId,
-      'ItemType':item,
+      'ItemName':item,
       'Category':category,
       'Quantity':quantity,
       'GivenAmount':amount,
-      'Color':color,
+      'Color':color.toString(),
       'First': first,
       'Middle':middle,
       'Last': last,
@@ -40,10 +41,29 @@ class OrderAddCancel{
       'AllowOrDenied':'',
       'ReasonForDenied':'',
       'OrderDate':FieldValue.serverTimestamp(),
-      'ConfirmOrderDate':''
+      'ConfirmOrderDate':'',
+    'DeliveryDate':'null',
+      'EnableItem':true
 
 
     });
   }
+  Future orderStatus()async{
+    String OrderId = UserNumber+'-'+ OrderNumber.toString();
+    // _OrderStatus.document('Delivery').setData({});
+    // _OrderStatus.document('Denied').setData({});
+   final exist = await _OrderStatus.document('Request').get();
+   if(exist.exists)
+     {
+      await _OrderStatus.document('Request')  .updateData({
+        'Requested_Id':FieldValue.arrayUnion([OrderId]),
+      });
+     }
+   else{
+     await _OrderStatus.document('Request')  .setData({
+       'Requested_Id':FieldValue.arrayUnion([OrderId]),
+     });
+   }
 
+  }
 }

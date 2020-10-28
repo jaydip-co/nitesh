@@ -1,13 +1,14 @@
-class UserInfo{
-  String number;
-  String address;
+ class UserInf{
+   String number;
+   String address;
   String first;
   String last;
   String middle;
   String city;
   int pincode;
+  int orderNumber;
 
-  UserInfo({
+  UserInf({
     this.number,
     this.address,
     this.first,
@@ -15,6 +16,7 @@ class UserInfo{
     this.last,
     this.city ,
     this.pincode,
+    this.orderNumber,
   });
 
 }

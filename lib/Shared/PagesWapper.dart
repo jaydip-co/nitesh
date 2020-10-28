@@ -8,7 +8,7 @@ import 'package:nitesh/Pages/Item/Product.dart';
 import 'package:nitesh/Pages/Address.dart';
 import 'package:nitesh/Pages/Order/ConfirmDetail.dart';
 import 'package:nitesh/Pages/Order/UserOrder.dart';
-import 'package:nitesh/Pages/Users/UserOrderDetails.dart';
+import 'file:///D:/app/nitesh/lib/Pages/Order/UserOrderDetails.dart';
 import 'package:provider/provider.dart';
 class PagesWrapper extends StatelessWidget {
 
@@ -34,6 +34,7 @@ class PagesWrapper extends StatelessWidget {
       return new Product();
     }//UserOrderDetails
     else if(_pageprovider.page == 'ConfirmDetails'){
+      print('sbhya');
       return new ConfirmDetails();
     }
     else if(_pageprovider.page == 'UserOrderDetails'){

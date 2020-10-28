@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:nitesh/Common/CircularProgressIndicotr.dart';
 import 'package:nitesh/Model/Appbar.dart';
 import 'package:nitesh/Model/Pages.dart';
 import 'package:nitesh/Model/Product.dart';
@@ -16,6 +17,19 @@ class UserOrder extends StatefulWidget {
 }
 
 class _UserOrderState extends State<UserOrder> {
+  ScrollController _scrollcontroller;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _scrollcontroller = ScrollController();
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _scrollcontroller.dispose();
+  }
   @override
   Widget build(BuildContext context) {
       final _userprovider = Provider.of<User>(context);
@@ -24,6 +38,7 @@ class _UserOrderState extends State<UserOrder> {
 
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+
     return WillPopScope(
       onWillPop: (){
         return _pageprovider.setpages(_pageprovider.previouspage,_pageprovider.page.toString());
@@ -40,23 +55,24 @@ class _UserOrderState extends State<UserOrder> {
 
               return ListView.builder(
                     itemCount:   Usersnapshot.data['LastOrder'].length ?? 0,
-
+                    controller: _scrollcontroller,
                   itemBuilder: (context,index){
                     return StreamBuilder<DocumentSnapshot>(
                       stream: Firestore.instance.collection('Order').document(userOrder [index]).snapshots(),
-                      builder: (context,OrdeSnapshot){
-                        if(OrdeSnapshot.hasData)
+                      builder: (context,OrderSnapshot){
+                        if(OrderSnapshot.hasData)
                           {
                             return StreamBuilder<DocumentSnapshot>(
-                                stream: Firestore.instance.collection('SellerProduct').document(OrdeSnapshot.data['ItemType']).snapshots(),
+                                stream: Firestore.instance.collection('SellerProduct').document(OrderSnapshot.data['ItemName']).snapshots(),
                                 builder:(context,itemsnapshot){
 
                                   if(itemsnapshot.hasData){
-                                    Timestamp t = OrdeSnapshot.data['OrderDate'];
+                                    Timestamp t = OrderSnapshot.data['OrderDate'];
                                     DateTime d = t.toDate();
                                     return Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Card(
+
                                         shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(5.0),
                                           side: new BorderSide(color: Colors.black, width: 0.3),
@@ -66,7 +82,7 @@ class _UserOrderState extends State<UserOrder> {
                                             Card(
                                               shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.circular(5.0),
-                                                side: new BorderSide(color: Colors.black, width: 0.1),
+                                                side: new BorderSide(color: Colors.black, width: 0.05),
                                               ),
                                               child:  ListTile(
                                                 leading: GestureDetector(
@@ -99,7 +115,8 @@ class _UserOrderState extends State<UserOrder> {
                                             ),
                                             GestureDetector(
                                                 onTap: (){
-
+                                                  _tempproduct.setOrderNumber(OrderSnapshot.data.documentID);
+                                                  _pageprovider.setpages('UserOrderDetails', _pageprovider.page);
                                                 },
                                               child: ListTile(
                                                 title: Text('View Order Details'),
@@ -126,7 +143,7 @@ class _UserOrderState extends State<UserOrder> {
               });
             }
             else{
-              return Loading();
+              return CircularLoading();
             }
           }
         ),
@@ -134,4 +151,5 @@ class _UserOrderState extends State<UserOrder> {
       ),
     );
   }
+
 }

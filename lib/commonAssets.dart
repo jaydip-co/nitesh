@@ -24,5 +24,13 @@ class CommonAssets{
  static Color orderpagebackcolor = Colors.grey[300];
 //card text style
 static Color cardTextColor = Colors.black;
+ static Color cardborder = Colors.black;
+
+ //coustom error
+static Color customerrortextcolor = Colors.red;
+static double customerrorfontsize = 18.0;
+//loading
+static Color loadingbackground = Colors.green.withOpacity(0.5);
+ static Color loadingcolor = Colors.green;
 
 }

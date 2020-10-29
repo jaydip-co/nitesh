@@ -139,10 +139,13 @@ class _UserOrderDetailsState extends State<UserOrderDetails> {
                                             Container(
                                               height: 15,
                                               width: width *0.3,
+
                                               decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(10.0),
                                                 color: Color(int.parse(OrderIdSnapshot.data['Color']))
                                               ),
-                                            )
+                                            ),
+                                            SizedBox(height: 10,),
                                           ],
                                         ),
                                       )

@@ -49,8 +49,10 @@ class _UserOrderState extends State<UserOrder> {
           stream: Firestore.instance.collection('Users').document(_userprovider.UserNumber).snapshots(),
           builder: (context,Usersnapshot){
             if(Usersnapshot.hasData){
-              List<String> userOrder = List.from(Usersnapshot.data['LastOrder']);
-              userOrder.sort((a, b) => b.compareTo(a));
+              List<String> Order = List.from(Usersnapshot.data['LastOrder']);
+              List<String> userOrder = Order.reversed.toList();
+
+
               print(userOrder);
 
               return ListView.builder(
@@ -110,7 +112,7 @@ class _UserOrderState extends State<UserOrder> {
                                                     fontWeight: FontWeight.w500
                                                   ),
                                                 ),
-                                                subtitle: Text(d.toString().substring(0,19)?? 'Date Miss'),
+                                                subtitle: Text(d.toString().substring(0,16)?? 'Date Miss'),
                                               ),
                                             ),
                                             GestureDetector(

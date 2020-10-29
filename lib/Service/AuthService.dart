@@ -19,6 +19,27 @@ class AuthService {
     return _auth.onAuthStateChanged.map((firebaseUser));
   }
 
+  Future  MobileNumberColl(String number)async{
+    try{
+      final CollectionReference _mobile =  Firestore.instance.collection('MobileNumber');
+      final exist = await _mobile.document('Allnumber').get();
+      if(exist.exists)
+      {
+        await _mobile.document('Allnumber').updateData({
+          'Number':FieldValue.arrayUnion([number])
+        });
+      }
+      else{
+        await _mobile.document('Allnumber').setData({
+          'Number':FieldValue.arrayUnion([number])
+        });
+      }
+    }
+    catch(e){
+      
+    }
+  }
+//'Number':FieldValue.arrayUnion([number])
   Future signout() async {
     return await _auth.signOut();
   }

@@ -29,6 +29,7 @@ class DatabaseService{
         print('exist');
       }
     } catch (e) {
+      print("newUser");
       print(e.toString());
     }
   }
@@ -36,23 +37,29 @@ class DatabaseService{
 
   Future UpdateData(String first,String middle,String last,String city,String address,int pincode,)async{
 
-    await _usercollection.document(number).updateData({
-      'First': first,
-      'Middle':middle,
-      'Last': last,
-      'City': city,
-      'Pincode': pincode,
-      'Address': address,
-    /*  'OrderNumber': order,
+    try{
+      await _usercollection.document(number).updateData({
+        'First': first,
+        'Middle':middle,
+        'Last': last,
+        'City': city,
+        'Pincode': pincode,
+        'Address': address,
+        /*  'OrderNumber': order,
       'LastOrder':FieldValue.arrayUnion(['$number/'+'$order'])*/
-    });
+      });
+    }
+    catch(e){
+      print("updatedata");
+    print(e.toString());
+    }
 
   }
-  Future codPaytem(int order)async{
-
-    await _usercollection.document(number).updateData({
-      'OrderNumber': order,
-      'LastOrder':FieldValue.arrayUnion([number+'-'+'$order'])
-    });
-  }
+  // Future codPaytem(int order)async{
+  //
+  //   await _usercollection.document(number).updateData({
+  //     'OrderNumber': order,
+  //     'LastOrder':FieldValue.arrayUnion([number+'-'+'$order'])
+  //   });
+  // }
 }

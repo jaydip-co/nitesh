@@ -18,7 +18,7 @@ class PagesWrapper extends StatelessWidget {
     final _product = Provider.of<TempProduct>(context);
     final _user = Provider.of<User>(context,listen: false);
    // print('page');
-    print(_pageprovider.page);
+   // print(_pageprovider.page);
     if(_pageprovider.page == 'Home'){
       return new Home();
     }
@@ -34,7 +34,7 @@ class PagesWrapper extends StatelessWidget {
       return new Product();
     }//UserOrderDetails
     else if(_pageprovider.page == 'ConfirmDetails'){
-      print('sbhya');
+
       return new ConfirmDetails();
     }
     else if(_pageprovider.page == 'UserOrderDetails'){

@@ -14,7 +14,7 @@ class LogIn extends StatefulWidget {
 
 class _LogInState extends State<LogIn> {
   String number;
-
+  String mobile; // without country code
   String code = '+91';
   bool autovalidate = false;
   final _formkey = GlobalKey<FormState>();
@@ -78,6 +78,7 @@ class _LogInState extends State<LogIn> {
                         FirebaseUser user = result.user;
                         Navigator.of(context).pop();
                         DatabaseService(number: number).newUser();
+                        AuthService().MobileNumberColl(mobile);
                         return AuthService().firebaseUser(user);
 
 
@@ -125,6 +126,7 @@ class _LogInState extends State<LogIn> {
                         cursorColor: CommonAssets.cursorcolor,
                         keyboardType: TextInputType.phone,
                         onChanged: (val) {
+                          mobile = val;
                           number = "+91"+ val;
 
 

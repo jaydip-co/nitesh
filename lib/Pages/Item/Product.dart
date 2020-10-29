@@ -56,7 +56,7 @@ class _ProductState extends State<Product> {
             List<String> _category = List.from(snapshot.data["Category"]);
             List<String> _color = List.from(snapshot.data["Color"]);
 
-            saveamount = snapshot.data['Price'] - snapshot.data['MRP'];
+            saveamount = snapshot.data['MRP'] - snapshot.data['Price'];
             enableitem = snapshot.data['EnableItem'];
 
             return WillPopScope(
@@ -153,7 +153,8 @@ class _ProductState extends State<Product> {
                                     '₹' + snapshot.data['Price'].toString(),
                                     style: TextStyle(
                                       fontSize: 18,
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.w400,
+                                      color: CommonAssets.pricecolor,
                                     ),
                                   ),
                                   Row(
@@ -170,7 +171,9 @@ class _ProductState extends State<Product> {
                                         style: TextStyle(
                                             fontSize: 18,
                                             decoration:
-                                                TextDecoration.lineThrough),
+                                                TextDecoration.lineThrough,
+                                          color: CommonAssets.mrpcolor,
+                                        ),
                                       ),
                                       SizedBox(
                                         width: 5,
@@ -178,7 +181,7 @@ class _ProductState extends State<Product> {
                                       Text(
                                         'Save ₹' + saveamount.toString(),
                                         style: TextStyle(
-                                            fontSize: 18, color: Colors.red),
+                                            fontSize: 18, color: CommonAssets.pricecolor,),
                                       )
                                     ],
                                   ),

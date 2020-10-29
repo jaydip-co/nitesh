@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_rich_text/easy_rich_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'dart:io' as Io;
+
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nitesh/Common/CircularProgressIndicotr.dart';
 import 'package:nitesh/Model/Appbar.dart';
@@ -29,6 +32,7 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin{
   AnimationController controller;
   final GlobalKey _formkey = GlobalKey<FormState>();
   bool autovalidate = false;
+  num saveamount;
   @override
   void initState() {
     // TODO: implement initState
@@ -44,12 +48,7 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin{
       });
     controller.stop();
     // controller.repeat();
-    Color color = new Color(0x12345678);
-    String colorString = color.toString(); // Color(0x12345678)
-    String valueString = colorString.split('(0x')[1].split(')')[0]; //
-    print(valueString);// kind of hacky..
-    int value = int.parse(valueString, radix: 16);
-    Color otherColor = new Color(value);
+
   }
 
   @override
@@ -58,6 +57,7 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin{
     super.dispose();
     controller.dispose();
   }
+
 
 
   @override
@@ -74,8 +74,10 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin{
 
           stream: Firestore.instance.collection('SellerProduct').where('EnableItem',isEqualTo: true).orderBy('ItemRank',descending: false).snapshots(),
           builder: (context, snapshot) {
+
             if(snapshot.hasData)
             {
+
               return WillPopScope(
                 onWillPop: (){
                   return _pageprovider.setpages('Home',_pageprovider.page.toString());
@@ -88,7 +90,7 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin{
                         Container(
 
                           width: width,
-                          height: 300,
+                          height: 250,
                           decoration: BoxDecoration(
                               color: Colors.white10,
                               image:DecorationImage(
@@ -104,62 +106,106 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin{
                         ),
                         Expanded(
                           child: ListView.builder(
+                              itemExtent: 150,
                               itemCount: snapshot.data.documents.length,
                               itemBuilder: (context,index){
-                                return Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.white
-                                  ),
-                                  child: GestureDetector(
-                                    onTap: ()async{
-                                      controller.stop();
-                                      await _tempProduct.setProduct(snapshot.data.documents[index].documentID);
-                                      return _pageprovider.setpages('Product',_pageprovider.page);
+                                saveamount = snapshot.data.documents[index]['MRP'] - snapshot.data.documents[index]['Price'];
+                                return GestureDetector(
+                                  onTap: ()async{
+                                    controller.stop();
+                                    await _tempProduct.setProduct(snapshot.data.documents[index].documentID);
+                                    return _pageprovider.setpages('Product',_pageprovider.page);
+                                  },
+                                  child: Card(
+                                    elevation: 4.0,
+                                    shape: RoundedRectangleBorder(side: new BorderSide(color: CommonAssets.cardborder, width: 0.5),borderRadius: BorderRadius.circular(4.0)),
+                                    clipBehavior: Clip.antiAlias,
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: <Widget>[
+                                        Card(
+                                          child: Container(
+                                            width:  180,
+                                            height: 150,
 
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(20.0),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            height: 160.0,
-                                            width: 180.0,
-                                            decoration: BoxDecoration(
-                                                border: Border(
-                                                  top: BorderSide(color: Colors.black),
-                                                  bottom: BorderSide(color: Colors.black),
-                                                  left: BorderSide(color: Colors.black),
-                                                  right: BorderSide(color: Colors.black),
+
+                                            child: FadeInImage.assetNetwork(
+                                              alignment: Alignment.topCenter,
+                                              placeholder: 'images/leaf.jpg',
+                                              image: snapshot.data.documents[index]['Images'][0],
+                                              fit: BoxFit.cover,
+
+                                            ),
+                                          ),
+                                        ),
+
+                                        Expanded(
+                                          child:  Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                snapshot.data.documents[index]['ItemTitle'].toString() + '',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w400,
+                                                    fontSize: 16.0
                                                 ),
-                                                borderRadius: BorderRadius.circular(30.0),
-
-                                                image: DecorationImage(
-                                                    image: NetworkImage(snapshot.data.documents[index]['Images'][0]),
-                                                    fit: BoxFit.cover
-                                                )
-                                            ),
-
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Text(
-                                              snapshot.data.documents[index]['ItemTitle'].toString() + '',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 18.0
                                               ),
-                                            ),
+                                              SizedBox(height: 5,),
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    '₹'+snapshot.data.documents[index]['Price'].toString(),
+                                                    style: TextStyle(
+                                                        fontWeight: FontWeight.w400,
+                                                        fontSize: 18.0,
+                                                      color: CommonAssets.pricecolor,
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: 4,),
+                                                  EasyRichText(
+                                                    '₹'+snapshot.data.documents[index]['Price'].toString(),
+                                                    patternList: [
+                                                      EasyRichTextPattern(
+                                                        targetString: '₹'+snapshot.data.documents[index]['Price'].toString(),
+                                                        subScript: true,
+                                                        //Only TM after Product will be modified
+                                                        stringBeforeTarget: 'Product',
+                                                        //There is no space between Product and TM
+                                                        matchWordBoundaries: false,
+                                                        style: TextStyle(
+                                                        color: CommonAssets.mrpcolor,
+                                                          decoration: TextDecoration.lineThrough,
+                                                          fontSize: 17.0
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  SizedBox(width: 4,),
+                                                  Text(
+                                                    'Save '+'₹'+saveamount.toString(),
+                                                    style: TextStyle(
+
+                                                      fontSize: 14.0,
+                                                      color: CommonAssets.savepricecolor,
+                                                    ),
+                                                  ),
+
+                                                ],
+                                              ),
+                                              SizedBox(height: 5,),
+                                              Text(
+                                                'Free Delivery',
+                                                style: TextStyle(
+
+                                                  fontSize: 15.0,
+
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                          Text(
-                                            '₹'+snapshot.data.documents[index]['Price'].toString(),
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 16.0
-                                            ),),
-                                          Divider(color: CommonAssets.dividerColor, thickness: CommonAssets.dividerthickness,),
-                                        ],
-                                      ),
+                                        )
+                                      ],
                                     ),
                                   ),
                                 );
@@ -170,16 +216,7 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin{
                     ),
                   ),
 
-                  /* floatingActionButton: FloatingActionButton(
-                    onPressed: (){
-                      //alertBox();
-                      controller.stop();
-                      _pageprovider.setpages('Order',_pageprovider.page);
 
-                    },
-                    backgroundColor: CommonAssets.buttonColor,
-                    child: Icon(Icons.highlight)
-                ),*/
 
 
               );

@@ -17,53 +17,66 @@ class OrderAddCancel{
       String first,String middle,String last,String city,String address,
 
       int pincode,  String alternativenumber,String orderId,String paymenttype,
-      String paymentId, )async{
+      String paymentId,
+      )async{
 
-      String OrderId = UserNumber+'-'+ OrderNumber.toString();
-    await _orderReference.document(OrderId.toString()).setData({
-      'UserId':userId,
-      'ItemName':item,
-      'Category':category,
-      'Quantity':quantity,
-      'GivenAmount':amount,
-      'Color':color.toString(),
-      'First': first,
-      'Middle':middle,
-      'Last': last,
-      'City': city,
-      'Pincode': pincode,
-      'Address': address,
-      'AlternativeNumber':'',
-      'OrderId':orderId,
-      'Paymenttype':paymenttype,
-      'PaymentId':paymentId,
-      'Status':"Request",
-      'AllowOrDenied':'',
-      'ReasonForDenied':'',
-      'OrderDate':FieldValue.serverTimestamp(),
-      'ConfirmOrderDate':'',
-    'DeliveryDate':'null',
-      'EnableItem':true
+      try{
+        String OrderId = UserNumber+'-'+ OrderNumber.toString();
+        await _orderReference.document(OrderId.toString()).setData({
+          'UserId':userId,
+          'ItemName':item,
+          'Category':category,
+          'Quantity':quantity,
+          'GivenAmount':amount,
+          'Color':color.toString(),
+          'First': first,
+          'Middle':middle,
+          'Last': last,
+          'City': city,
+          'Pincode': pincode,
+          'Address': address,
+          'AlternativeNumber':'',
+          'OrderId':orderId,
+          'Paymenttype':paymenttype,
+          'PaymentId':paymentId,
+          'Status':"Request",
+          'AllowOrDenied':'',
+          'ReasonForDenied':'',
+          'OrderDate':FieldValue.serverTimestamp(),
+          'ConfirmOrderDate':'',
+          'DeliveryDate':'null',
+          'EnableItem':true
 
 
-    });
+        });
+      }
+      catch(e){
+        print("addOrder");
+        print(e.toString());
+      }
   }
   Future orderStatus()async{
-    String OrderId = UserNumber+'-'+ OrderNumber.toString();
-    // _OrderStatus.document('Delivery').setData({});
-    // _OrderStatus.document('Denied').setData({});
-   final exist = await _OrderStatus.document('Request').get();
-   if(exist.exists)
-     {
-      await _OrderStatus.document('Request')  .updateData({
-        'Requested_Id':FieldValue.arrayUnion([OrderId]),
-      });
-     }
-   else{
-     await _OrderStatus.document('Request')  .setData({
-       'Requested_Id':FieldValue.arrayUnion([OrderId]),
-     });
-   }
+    try{
+      String OrderId = UserNumber+'-'+ OrderNumber.toString();
+      // _OrderStatus.document('Delivery').setData({});
+      // _OrderStatus.document('Denied').setData({});
+      final exist = await _OrderStatus.document('Request').get();
+      if(exist.exists)
+      {
+        await _OrderStatus.document('Request')  .updateData({
+          'Requested_Id':FieldValue.arrayUnion([OrderId]),
+        });
+      }
+      else{
+        await _OrderStatus.document('Request')  .setData({
+          'Requested_Id':FieldValue.arrayUnion([OrderId]),
+        });
+      }
+    }
+    catch(e){
+      print("orderStatus");
+      print(e.toString());
+    }
 
   }
 }

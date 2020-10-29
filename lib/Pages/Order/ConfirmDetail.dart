@@ -76,7 +76,7 @@ class _ConfirmDetailsState extends State<ConfirmDetails> {
 
 
   void _handlerSuccess(PaymentSuccessResponse response) async {
-    print('payment successs');
+    //print('payment successs');
     Fluttertoast.showToast(
       msg: 'Success :' + response.toString(),
     );

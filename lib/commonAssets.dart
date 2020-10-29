@@ -25,7 +25,10 @@ class CommonAssets{
 //card text style
 static Color cardTextColor = Colors.black;
  static Color cardborder = Colors.black;
-
+ // price color
+static Color pricecolor = Colors.red;
+ static Color mrpcolor = Colors.blueGrey;
+ static Color savepricecolor = Colors.green;
  //coustom error
 static Color customerrortextcolor = Colors.red;
 static double customerrorfontsize = 18.0;

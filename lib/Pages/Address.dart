@@ -74,7 +74,7 @@ class _OrderState extends State<Order> {
 
 
   Future _city() async {
-    print('hello');
+    
     final _city =
         await Firestore.instance.collection('states').document('Gujarat').get();
     // print(_city.data['City'].length);

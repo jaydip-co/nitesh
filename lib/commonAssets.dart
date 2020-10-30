@@ -28,7 +28,7 @@ static Color cardTextColor = Colors.black;
  // price color
 static Color pricecolor = Colors.red;
  static Color mrpcolor = Colors.blueGrey;
- static Color savepricecolor = Colors.green;
+ static Color savepricecolor = Colors.green.withOpacity(0.8/**/);
  //coustom error
 static Color customerrortextcolor = Colors.red;
 static double customerrorfontsize = 18.0;

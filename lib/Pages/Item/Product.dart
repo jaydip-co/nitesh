@@ -77,7 +77,7 @@ class _ProductState extends State<Product> {
                             style: TextStyle(
                                 fontSize: 18,
                                 fontStyle: FontStyle.normal,
-                                fontWeight: FontWeight.w500),
+                                fontWeight: FontWeight.w400),
                           ),
                         ),
                         Container(
@@ -181,7 +181,7 @@ class _ProductState extends State<Product> {
                                       Text(
                                         'Save ₹' + saveamount.toString(),
                                         style: TextStyle(
-                                            fontSize: 18, color: CommonAssets.pricecolor,),
+                                            fontSize: 18, color: CommonAssets.savepricecolor,),
                                       )
                                     ],
                                   ),

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:nitesh/Model/Pages.dart';
 import 'package:nitesh/Model/Product.dart';
 import 'package:nitesh/Model/User.dart';
+import 'package:nitesh/Name.dart';
 import 'package:nitesh/Pages/Auth/LogIn.dart';
 
 import 'package:nitesh/Pages/Home.dart';
@@ -21,7 +22,7 @@ class Wrapper extends StatelessWidget {
   Widget build(BuildContext context) {
      final user = Provider.of<User>(context);
      //return TestHome();
-
+     //  return CompanyName();
      if(user != null){
 
        return ChangeNotifierProvider<PageProvider>.value(

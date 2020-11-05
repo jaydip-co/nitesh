@@ -187,10 +187,10 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin{
                                                           ),
                                                           SizedBox(width: 4,),
                                                           EasyRichText(
-                                                            '₹'+snapshot.data.documents[index]['Price'].toString(),
+                                                            '₹'+snapshot.data.documents[index]['MRP'].toString(),
                                                             patternList: [
                                                               EasyRichTextPattern(
-                                                                targetString: '₹'+snapshot.data.documents[index]['Price'].toString(),
+                                                                targetString: '₹'+snapshot.data.documents[index]['MRP'].toString(),
                                                                 subScript: true,
                                                                 //Only TM after Product will be modified
                                                                 stringBeforeTarget: 'Product',
